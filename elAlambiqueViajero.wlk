@@ -11,6 +11,10 @@ object luke {
         return recuerdos
     }
 
+    method getVehiculo(){
+        return vehiculo
+    }
+
     method getUltimoRecuerdo(){
         if(not recuerdos.isEmpty()){
             return recuerdos.last()
@@ -20,7 +24,7 @@ object luke {
 
     method visitar(unaCiudad){
         if(unaCiudad.cumpleRestriccion(vehiculo)){
-            alambiqueVeloz.visitarCiudad(unaCiudad)
+            vehiculo.visitarCiudad(unaCiudad)
             self.traerRecuerdo(unaCiudad)
             lugaresVisitados += 1
         }
@@ -47,12 +51,7 @@ object alambiqueVeloz {
     }
 
     method visitarCiudad(unaCiudad){
-        if(unaCiudad.getName() == "Paris"){
-            combustible -= 30
-        }
-        else {
-            combustible -= 20
-        }
+        combustible -= unaCiudad.getCombustibleNecesario()
     }
 
     method cargarCombustible(litros){
@@ -60,9 +59,33 @@ object alambiqueVeloz {
     }
 }
 
+object superChatarra {
+    var municiones = 100
+
+    method getCombustible(){
+        return municiones
+    }
+
+    method esVeloz(){
+        return municiones <= 50
+    }
+
+    method visitarCiudad(unaCiudad){
+        municiones -= unaCiudad.getCombustibleNecesario() * 2
+    }
+
+    method recargar(balas){
+        municiones += balas
+    }
+}
+
 object buenosAires {
     const recuerdo = mate
     var presidente = "Batman"
+
+    method getCombustibleNecesario(){
+        return 20
+    }
 
     method getName(){
         return "Buenos Aires"
@@ -113,6 +136,10 @@ object paris {
         return "Paris"
     }
 
+    method getCombustibleNecesario(){
+        return 30
+    }
+
     method cumpleRestriccion(unVehiculo){
         return unVehiculo.getCombustible() >= 30
     }
@@ -131,6 +158,10 @@ object bagdad {
     
     method getRecuerdo(){
         return objeto
+    }
+
+    method getCombustibleNecesario(){
+        return 20
     }
 
     method getName(){
@@ -177,6 +208,10 @@ object lasVegas {
 
     method getRecuerdo(){
         return ciudadConmemorada.getRecuerdo()
+    }
+
+    method getCombustibleNecesario(){
+        return ciudadConmemorada.getCombustibleNecesario()
     }
 
     method getName(){

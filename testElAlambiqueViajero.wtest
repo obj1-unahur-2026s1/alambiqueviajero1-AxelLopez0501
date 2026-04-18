@@ -1,0 +1,117 @@
+import elAlambiqueViajero.*
+
+describe "Grupo de test iniciales" {
+    test "Al inicio el alambique viajero tiene 50 lts de combustible" {
+        assert.equals(50, luke.getVehiculo().getCombustible())
+    }
+
+    test "Al inicio el último recuerdo de luke es null" {
+        assert.equals(null,luke.getUltimoRecuerdo())
+    }
+
+    test "Si cambia de vehiculo al inicio al super chatarra, las municiones son 100" {
+        luke.cambiarVehiculo(superChatarra)
+        assert.equals(100,luke.getVehiculo().getMuniciones())
+    }
+}
+
+describe "Grupo de test con alambique viajero" {
+    test "Si visita Paris el combustible del alambique pasa a ser 20" {
+        luke.visitar(paris)
+        assert.equals(20, luke.getVehiculo().getCombustible())
+    }
+
+    test "Si visita Paris el recuerdo será un llavero" {
+        luke.visitar(paris)
+        assert.equals(llavero,luke.getUltimoRecuerdo())
+    }
+
+    test "Si luego visita Buenos Aires el alambique no tendra combustible" {
+            luke.visitar(paris)
+            luke.visitar(buenosAires)
+            assert.equals(0, luke.getVehiculo().getCombustible())
+          }
+
+    test "Si luego visita Buenos Aires el ultimo recuerdo es un mate" {
+        luke.visitar(paris)
+        luke.visitar(buenosAires)
+        assert.equals(mate,luke.getUltimoRecuerdo())
+    }
+
+    test "Dicho mate tendrá yerba" {
+            luke.visitar(paris)
+            luke.visitar(buenosAires)
+            assert.that(luke.getUltimoRecuerdo().getYerba())
+          }
+    
+    test "Luego, cargando 20 lts el alambique será veloz" {
+        luke.visitar(paris)
+        luke.visitar(buenosAires)
+        luke.getVehiculo().cargarCombustible(20)
+        assert.that(luke.getVehiculo().esVeloz())
+    }
+
+    test "Si visita Bagdad el último recuerdo será combustible crudo" {
+        luke.visitar(paris)
+        luke.visitar(buenosAires)
+        luke.getVehiculo().cargarCombustible(20)
+        luke.visitar(bagdad)
+        assert.equals(combustibleCrudo,luke.getUltimoRecuerdo())
+    }
+
+    test "Si visita Bagdad, pero antes se cambia el recuerdo, el último recuerdo será una replica de los jardines flotantes" {
+        luke.visitar(paris)
+        luke.visitar(buenosAires)
+        luke.getVehiculo().cargarCombustible(20)
+        bagdad.cambiarObjeto()
+        luke.visitar(bagdad)
+        assert.equals(jardinesFlotantes,luke.getUltimoRecuerdo())
+    }
+
+    test "Si se visita Las Vegas, el recuerdo será un mate" {
+        luke.visitar(paris)
+        buenosAires.cambiarPresi()
+        luke.visitar(lasVegas)
+        assert.equals(mate,luke.getUltimoRecuerdo())
+    }
+
+    test "Si se cambia el presidente antes, dicho mate no tendrá yerba" {
+        luke.visitar(paris)
+        buenosAires.cambiarPresi()
+        luke.visitar(lasVegas)
+        assert.notThat(luke.getUltimoRecuerdo().getYerba())
+    }
+
+    test "Si luke trata de visitar primero Buenos Aires, no podrá y el ultimo recuerdo será null" {
+        luke.visitar(buenosAires)
+        assert.equals(null,luke.getUltimoRecuerdo())
+    }
+}
+
+describe "Grupo de test con super chatarra" {
+    test "Si se visita Paris las municiones serán 40"{
+        luke.cambiarVehiculo(superChatarra)
+        luke.visitar(paris)
+        assert.equals(superChatarra,luke.getVehiculo())
+    }
+
+    test "Luego de visitar Paris el super chatarra será veloz"{
+        luke.cambiarVehiculo(superChatarra)
+        luke.visitar(paris)
+        assert.that(luke.getVehiculo().esVeloz())
+    }
+
+    test "Si cambia 2 veces el recuerdo de Bagdad, el último recuerdo serían las armas"{
+        bagdad.cambiarObjeto()
+        bagdad.cambiarObjeto()
+        luke.cambiarVehiculo(superChatarra)
+        luke.visitar(bagdad)
+        assert.equals(armas,luke.getUltimoRecuerdo())
+    }
+
+    test "Si recarga 50 municiones, el combustible será 150"{
+        luke.cambiarVehiculo(superChatarra)
+        luke.getVehiculo().recargar(50)
+        assert.equals(150,luke.getVehiculo().getCombustible())
+    }
+}
